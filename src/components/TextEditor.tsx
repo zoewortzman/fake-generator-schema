@@ -28,10 +28,10 @@ const TextEditor: React.FC<TextEditorProps> = ({ initialText }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea value={text} onChange={handleChange} rows={10} cols={50} />
-      <button type="submit">Generate fake data</button>
+    <form className='flex items-center full rounded-lg bg-gray-100 p-3 w-25 p-5' onSubmit={handleSubmit}>
+      <textarea className="grow bg-transparent text-wrap outline-none scroll-smooth" value={text} onChange={handleChange} rows={10} cols={50} />
     </form>
+
   );
 };
 
