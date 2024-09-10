@@ -1,7 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+// import { db } from '@vercel/postgres';
 
-export default async function handler(req: NextApiRequest, res: string) {
-    console.log(req)
-    res = 'TEST'
-    
-}
+
+// async function myCall(table){
+//     await sql`SELECT * FROM ${table}`
+// }
+
+// function myCall(query){
+//     await sql`${query}`;
+
+// }
