@@ -53,7 +53,7 @@ export default function DisplayTable({ params }: DisplayTableProps) {
           }
         };
         fetchTable();
-      }, []); 
+      }, [tableName]); 
       
   const handleDelete = async () => {
     try {
