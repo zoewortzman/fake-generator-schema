@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Navbar from "../components/Navbar";
+import Image from "next/image";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          {children}
+        <div className="fixed top-0 left-2 z-50">
+          <Image
+            src="/datastack.png"
+            alt="Datastack Logo"
+            width={140} 
+            height={140} 
+          />
+        </div>
+        <Navbar />
+        <main>{children}</main>
       </body>
     </html>
   );
