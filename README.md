@@ -1,4 +1,4 @@
-This project allows a user to generate a fake dataset with no coding experience required.
+This project allows a user to generate a fake dataset, no coding experience required.
 <img width="1316" alt="Screenshot 2024-10-02 at 1 36 41 AM" src="https://github.com/user-attachments/assets/66c9767d-3535-4a86-9f3d-68d90ad36a52">
 
 Users can enter a schema idea to get started with some help from chatGPT. 
