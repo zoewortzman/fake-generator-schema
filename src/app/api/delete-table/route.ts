@@ -2,12 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from '../../lib/supabaseClient'
 
 const { Client } = require('pg');
-
-
 export async function POST(request: NextRequest): Promise<NextResponse> {
-
 const connectionString = process.env.CONNECTION_STRING;
-
 const client = new Client({
   connectionString: connectionString,
 });
@@ -15,11 +11,8 @@ const client = new Client({
 try {
 
     await client.connect();
-
     const {tableName}  = await request.json();
-
     await client.query(`DROP TABLE IF EXISTS ${tableName}`);
-
     const { error } = await supabase
     .from('fakedata_tablenames')
     .delete()

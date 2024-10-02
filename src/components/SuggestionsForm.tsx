@@ -6,7 +6,7 @@ interface FormProps {
 
 export default function SuggestionsForm({ setChoices }: FormProps) {
   const [prompt, setPrompt] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="relative">
@@ -18,7 +18,7 @@ export default function SuggestionsForm({ setChoices }: FormProps) {
             return;
           }
 
-          setLoading(true); // Set loading to true when starting the request
+          setLoading(true);
 
           try {
             const response = await fetch("/api/openAI", {
@@ -51,13 +51,13 @@ export default function SuggestionsForm({ setChoices }: FormProps) {
           }}
         />
         <div className="relative shadow-md bg-gray-800 py-2 px-4 shadow-gray-900/10 text-white">
-          <input type="submit" disabled={loading} /> {/* Disable button while loading */}
+          <input type="submit" disabled={loading} /> 
         </div>
       </form>
 
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75 z-50">
-          <span className="text-xl font-bold">Loading...</span> {/* Simple loading indicator */}
+          <span className="text-xl font-bold">Loading...</span>
         </div>
       )}
     </div>

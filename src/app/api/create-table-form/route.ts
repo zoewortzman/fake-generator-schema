@@ -43,7 +43,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   });
 
   try {
-    // Parse the request body to get the SQL command
     const { tableName, tableFields } = await request.json();
 
     if (!tableFields) {
@@ -72,7 +71,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const sqlInserts = mockarooData
       .replace(/insert into\s+\(/g, `insert into ${tableName} (`)
-      .trim(); // Optionally trim leading/trailing whitespace
+      .trim(); 
 
     await client.query(sqlInserts);
 
@@ -99,7 +98,6 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   });
 
   try {
-    // Parse the request body to get the SQL command
     const { tableName, tableFields } = await request.json();
 
     await client.connect();
@@ -116,7 +114,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 
     const sqlInserts = mockarooData
       .replace(/insert into\s+\(/g, `insert into ${tableName} (`)
-      .trim(); // Optionally trim leading/trailing whitespace
+      .trim(); 
 
     await client.query(sqlInserts);
 

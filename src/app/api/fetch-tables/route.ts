@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 const { Client } = require('pg');
 
-// Replace with your actual connection string
 const connectionString = process.env.CONNECTION_STRING;
 
 export async function POST(): Promise<NextResponse> {
@@ -11,14 +10,11 @@ export async function POST(): Promise<NextResponse> {
       await client.connect();
   try {
     const data = await client.query(`SELECT table_name FROM fakedata_tablenames`);
-    // Return successful response with fetched data
     return NextResponse.json({ message: 'Table names fetched', data: data.rows});
 } catch (err) {
     console.error("Error executing SQL command:", err);
-    // Return an error response
     return NextResponse.json("Failed to execute SQL command", { status: 500 });
   } finally {
-    // Close the database connection
     await client.end();
   }
 }

@@ -34,7 +34,6 @@ export default function DisplayTable({ params }: DisplayTableProps) {
       useEffect(() => {
         const fetchTable = async () => {
           try {
-            // Send SQL command to the Next.js API route
             const response = await fetch("/api/load-tables", {
               method: "POST",
               headers: {
@@ -42,7 +41,6 @@ export default function DisplayTable({ params }: DisplayTableProps) {
               },
               body: JSON.stringify({ tableName }),
             });
-            // Read and parse the response once
             const result: any = await response.json();
             console.log("Fetched table:", result);
             if (result.data?.rows) {
@@ -55,7 +53,7 @@ export default function DisplayTable({ params }: DisplayTableProps) {
           }
         };
         fetchTable();
-      }, []); // Empty dependency array to run once on mount
+      }, []); 
       
   const handleDelete = async () => {
     try {

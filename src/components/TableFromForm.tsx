@@ -1,6 +1,6 @@
-import React, { useState} from "react";
-import FakeDataTable from './FakeDataTable'
-import Modal from './Modal'
+import React, { useState } from "react";
+import FakeDataTable from "./FakeDataTable";
+import Modal from "./Modal";
 
 interface TableField {
   name: string;
@@ -23,7 +23,7 @@ export default function TableFromForm() {
     "City",
     "Color",
     "Company Name",
-    "Country",  
+    "Country",
     "Country Code",
     "Credit Card #",
     "Credit Card Type",
@@ -49,25 +49,19 @@ export default function TableFromForm() {
     setTableName(e.target.value);
   };
 
-  const handleDone= () => {
+  const handleDone = () => {
     setTableName("");
-    setFakeData([])
-    setTableFields([
-      { name: "", dataFormat: "" },
-    ])
-    setMoreData(false)
+    setFakeData([]);
+    setTableFields([{ name: "", dataFormat: "" }]);
+    setMoreData(false);
   };
 
-    
   const addField = () => {
     const lastField = [...tableFields][tableFields.length - 1];
     if (lastField.name === "" || lastField.dataFormat === "") {
       alert("Finish adding column name or type from the previous row");
     } else {
-      setTableFields([
-        ...tableFields,
-        { name: "",dataFormat: "" },
-      ]);
+      setTableFields([...tableFields, { name: "", dataFormat: "" }]);
     }
   };
 
@@ -81,7 +75,7 @@ export default function TableFromForm() {
     setTableFields(newUpdatedFields);
 
     if (newUpdatedFields.length === 0) {
-      setTableFields([{ name: "",dataFormat: "" }]);
+      setTableFields([{ name: "", dataFormat: "" }]);
     }
   };
 
@@ -155,7 +149,7 @@ export default function TableFromForm() {
       });
       const result: any = await response.json();
       setFakeData(result.data.rows);
-      setMoreData(true)
+      setMoreData(true);
     } catch (error) {
       console.error("Error submitting SQL command:", error);
       alert("Table may still be loading, try again in a minute!");
@@ -208,23 +202,29 @@ export default function TableFromForm() {
         </button>
       </div>
       <div className="pl-2">
-      <button className="pl-2 pt-2 relative shadow-md bg-gray-800 py-2 px-4 shadow-gray-900/10 text-white" onClick={handleSubmit}>
-        Create Table
-      </button>
-
+        <button
+          className="pl-2 pt-2 relative shadow-md bg-gray-800 py-2 px-4 shadow-gray-900/10 text-white"
+          onClick={handleSubmit}
+        >
+          Create Table
+        </button>
       </div>
 
-
       <Modal isOpen={fakeData.length > 0} onClose={() => setModalOpen(false)}>
-      <button className="absolute top-5 right-2 p-2 bg-gray-100 rounded text-black hover:bg-gray-200"  onClick={handleDone} disabled={moreData}> Close </button>
-        <FakeDataTable 
+        <button
+          className="absolute top-5 right-2 p-2 bg-gray-100 rounded text-black hover:bg-gray-200"
+          onClick={handleDone}
+          disabled={moreData}
+        >
+          {" "}
+          Close{" "}
+        </button>
+        <FakeDataTable
           fakeData={fakeData}
           tableName={tableName}
           handleGenerateMore={handleGenerateMore}
         />
-        
       </Modal>
-
     </div>
   );
 }

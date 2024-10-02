@@ -63,13 +63,8 @@ export default function TextEditor({ initialText }: TextEditorProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     console.log(tableSchema)
     e.preventDefault();
-
-    // SQL command hard-coded in the component
     const sqlCommand = `DROP TABLE IF EXISTS accounting_data; CREATE TABLE accounting_data (transaction_id int, date date, description text, amount numeric, category text, account_id int);`
-    // Call the backend server to execute the SQL command
     try {
-
-      // Send SQL command to the Next.js API route
       const response = await fetch("/api/create-table", {
         method: "POST",
         headers: {
