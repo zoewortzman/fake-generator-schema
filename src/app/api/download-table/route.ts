@@ -15,7 +15,5 @@ try {
   } catch (err) {
     console.error("Error executing SQL command:", err);
     return NextResponse.json("Failed to download table", { status: 500 });
-  } finally {
-    await client.end();
   }
 }
