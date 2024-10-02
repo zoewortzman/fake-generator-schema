@@ -1,7 +1,7 @@
 const { Client } = require('pg');
 const { NextRequest, NextResponse } = require('next/server');
 
-const connectionString = 'postgresql://postgres.urabuonbrmozvckwiend:zuphip-5difBu-xigwyx@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
+const connectionString = process.env.CONNECTION_STRING;
 
 const client = new Client({
   connectionString: connectionString,

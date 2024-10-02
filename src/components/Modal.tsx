@@ -7,17 +7,11 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null; 
+  if (!isOpen) return null; // Do not render anything if not open
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg">
-      <button 
-          onClick={onClose} 
-          aria-label="Close modal"
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
-        >
-          X </button>
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50">
+      <div className="relative bg-white p-6 rounded shadow-lg mt-[100px] max-h-[80vh] overflow-y-auto">
         {children}
       </div>
     </div>

@@ -4,61 +4,45 @@ import Modal from './Modal'
 
 interface TableField {
   name: string;
-  dataType: string;
   dataFormat: string;
 }
 
 export default function TableFromForm() {
   const [tableName, setTableName] = useState("");
   const [tableFields, setTableFields] = useState<TableField[]>([
-    { name: "", dataType: "", dataFormat: "" },
+    { name: "", dataFormat: "" },
   ]);
-  const [fakeData, setFakeData] = useState([]);
+  const [fakeData, setFakeData] = useState<any[]>([]);
   const [moreData, setMoreData] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const sqlDataTypes = [
-    "int",
-    "float",
-    "numeric",
-    "json",
-    "jsonb",
-    "text",
-    "varchar(255)",
-    "uuid",
-    "date",
-    "time",
-    "timetz",
-    "timestamp",
-    "tampstampz",
-    "bool",
-  ];
-
   const dataFormats = [
-    "Base64 Image URL",
     "Airport Name",
-    "Base64 Image URL",
     "Car Make",
     "Car Model",
     "City",
     "Color",
     "Company Name",
-    "Country",
+    "Country",  
     "Country Code",
     "Credit Card #",
     "Credit Card Type",
+    "Email Address",
     "First Name",
     "Last Name",
     "Gender",
+    "GUID",
     "Job Title",
-    "JSON Array",
     "Movie Title",
     "Number",
     "Phone",
     "Postal Code",
+    "Product (Grocery)",
     "State",
+    "Street Address",
+    "Datetime",
     "Time",
-    "URL"
+    "URL",
   ];
 
   const handleTableNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,19 +53,20 @@ export default function TableFromForm() {
     setTableName("");
     setFakeData([])
     setTableFields([
-      { name: "", dataType: "", dataFormat: "" },
+      { name: "", dataFormat: "" },
     ])
+    setMoreData(false)
   };
 
     
   const addField = () => {
     const lastField = [...tableFields][tableFields.length - 1];
-    if (lastField.name === "" || lastField.dataType === "") {
-      alert("Finish adding table fields or data types from the previous row");
+    if (lastField.name === "" || lastField.dataFormat === "") {
+      alert("Finish adding column name or type from the previous row");
     } else {
       setTableFields([
         ...tableFields,
-        { name: "", dataType: "", dataFormat: "" },
+        { name: "",dataFormat: "" },
       ]);
     }
   };
@@ -96,7 +81,7 @@ export default function TableFromForm() {
     setTableFields(newUpdatedFields);
 
     if (newUpdatedFields.length === 0) {
-      setTableFields([{ name: "", dataType: "", dataFormat: "" }]);
+      setTableFields([{ name: "",dataFormat: "" }]);
     }
   };
 
@@ -106,18 +91,6 @@ export default function TableFromForm() {
   ) => {
     const updatedFields = [...tableFields];
     updatedFields[index] = { ...updatedFields[index], name: e.target.value };
-    setTableFields(updatedFields);
-  };
-
-  const handleDataType = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    index: number
-  ) => {
-    const updatedFields = [...tableFields];
-    updatedFields[index] = {
-      ...updatedFields[index],
-      dataType: e.target.value,
-    };
     setTableFields(updatedFields);
   };
 
@@ -141,7 +114,7 @@ export default function TableFromForm() {
 
     console.log(data);
     const lastField = [...tableFields][tableFields.length - 1];
-    if (lastField.name === "" || lastField.dataType === "") {
+    if (lastField.name === "") {
       alert("Finish adding table fields or data types from the previous row");
       return;
     }
@@ -178,10 +151,11 @@ export default function TableFromForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ tableName }),
+        body: JSON.stringify({ tableName, tableFields }),
       });
       const result: any = await response.json();
       setFakeData(result.data.rows);
+      setMoreData(true)
     } catch (error) {
       console.error("Error submitting SQL command:", error);
       alert("Table may still be loading, try again in a minute!");
@@ -207,27 +181,13 @@ export default function TableFromForm() {
             <input
               type="text"
               value={field.name}
-              placeholder="field"
+              placeholder="Column name"
               onChange={(e) => handleFieldChange(e, index)}
             />
             <select
-              value={field.dataType}
-              onChange={(e) => handleDataType(e, index)}
-              className=" outline-2 rounded-lg bg-gray-100 p-2 w-25 h-10 mt-2"
-            >
-              <option value="" disabled>
-                Select a type
-              </option>
-              {sqlDataTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            <select
               value={field.dataFormat}
               onChange={(e) => handleDataFormat(e, index)}
-              className="ml-2 outline-2 rounded-lg bg-gray-100 p-2 w-25 h-10 mt-2"
+              className="outline-2 rounded-lg bg-gray-100 p-2 w-25 h-10 mt-2"
             >
               <option value="" disabled>
                 Select a type
@@ -238,8 +198,7 @@ export default function TableFromForm() {
                 </option>
               ))}
             </select>
-
-            <button onClick={(e) => deleteField(e, index)} className="pt-2">
+            <button onClick={(e) => deleteField(e, index)} className="pl-2">
               Delete Field
             </button>
           </div>
@@ -248,17 +207,22 @@ export default function TableFromForm() {
           Add Field
         </button>
       </div>
+      <div className="pl-2">
       <button className="pl-2 pt-2 relative shadow-md bg-gray-800 py-2 px-4 shadow-gray-900/10 text-white" onClick={handleSubmit}>
         Create Table
       </button>
 
+      </div>
+
+
       <Modal isOpen={fakeData.length > 0} onClose={() => setModalOpen(false)}>
+      <button className="absolute top-5 right-2 p-2 bg-gray-100 rounded text-black hover:bg-gray-200"  onClick={handleDone} disabled={moreData}> Close </button>
         <FakeDataTable 
           fakeData={fakeData}
           tableName={tableName}
           handleGenerateMore={handleGenerateMore}
         />
-        <button className="p-2  bg-gray-100 rounded text-black hover:bg-gray-200" onClick={handleDone}> Close </button>
+        
       </Modal>
 
     </div>

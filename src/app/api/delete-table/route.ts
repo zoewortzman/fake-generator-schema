@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient'
 
 const { Client } = require('pg');
-const connectionString =
-  "postgresql://postgres.urabuonbrmozvckwiend:zuphip-5difBu-xigwyx@aws-0-us-west-1.pooler.supabase.com:6543/postgres";
+
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
 
+const connectionString = process.env.CONNECTION_STRING;
+
+const client = new Client({
+  connectionString: connectionString,
+});
+
 try {
-    const client = new Client({
-        connectionString: connectionString,
-      });
-      await client.connect();
+
+    await client.connect();
 
     const {tableName}  = await request.json();
 

@@ -12,7 +12,6 @@ export default function FakeDataTable({
   handleGenerateMore,
 }: FakeDataTableProps) {
 
-
   const handleDownload = async () => {
     try {
       const response = await fetch("/api/download-table", {
@@ -69,12 +68,16 @@ export default function FakeDataTable({
           ))}
         </tbody>
       </table>
+      <div className="pt-3">
       <button className="px-2" onClick={handleGenerateMore}>
         Add 100 more rows
       </button>
       <button className="px-2" onClick={handleDownload}>
         Download CSV
       </button>
+
+      </div>
+
     </div>
   );
 }

@@ -6,7 +6,6 @@ export async function POST(request) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  // user input
   const params = await request.json();
 
   const response = await openai.chat.completions.create({
@@ -29,69 +28,40 @@ export async function POST(request) {
             timestamp
             tampstampz
             bool. The third array is a description of the data, such as first name, or country. Format must be selected from this list below:
-Airport Code
-Airport Name
-App Bundle ID
-Base64 Image URL
-Car Make
-City
-Country
-Country Code
-Credit Card #
-Credit Card Type
-Dataset Column
-Datetime
-Drug Company
-Drug Name (Brand)
-Drug Name (Generic)
-Email Address
-Fake Company Name
-Family Name (Chinese)
-FDA NDC Code
-File Name
-First Name
-First Name (Female)
-First Name (Male)
-Formula
-Frequency
-Full Name
-Gender
-Gender (abbrev)
-Gender (Binary)
-Gender (Facebook)
-Geometric Distribution
-Given Name (Chinese)
-GUID
-Hex Color
-Job Title
-Language
-Last Name
-Latitude
-LinkedIn Skill
-Movie Genres
-Movie Title
-Number
-Phone
-Product (Grocery)
-Row Number
-State
-Stock Name
-Stock Symbol
-Street Address
-Street Name
-Street Number
-Street Suffix
-Time
-URL
-User Agent
-Username
-Words. 
+    Airport Name,
+    Car Make,
+    Car Model,
+    City,
+    Color,
+    Company Name,
+    Country,  
+    Country Code,
+    Credit Card #,
+    Credit Card Type,
+    Email Address,
+    First Name,
+    Last Name,
+    Gender,
+    GUID,
+    Job Title,
+    Movie Title,
+    Number,
+    Phone,
+    Postal Code,
+    Product (Grocery),
+    State,
+    Street Address,
+    Datetime,
+    Time,
+    URL,
 
-Do not confuse format and datatype, they are different and must be chosen from their respentive lists. The format to return is 
+The format to return is 
 Column names: []
 Data types: []
-Format: []. This output will be parsed in an API so do not alter it.
-Name: this is the name of the sql table`,
+Format: []. 
+Name: this is the name of the sql table
+
+This output will be parsed in an API so do not alter it.`,
       },
       {
         role: "user",

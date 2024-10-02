@@ -13,13 +13,8 @@ export default function DisplayTable({ params }: DisplayTableProps) {
     const [fakeData, setFakeData] = useState([]);
     const tableName = params.tableName;
 
-    const handleDone= () => {
-        setFakeData([])
-      };
-
       const handleGenerateMore = async () => {
         try {
-          // Send SQL command to the Next.js API route
           const response = await fetch("/api/create-table-form", {
             method: "PUT",
             headers: {

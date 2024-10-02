@@ -32,15 +32,15 @@ export default function Navbar() {
     };
 
     fetchTableNames();
-  }, []);
+  }, []); 
 
   return (
-    <nav className="fixed top-0 left-0 h-screen w-48 bg-white border-r border-gray-200">
+    <nav className="fixed top-0 left-0 h-screen w-48 bg-slate-200">
       <div className="h-[120px] bg-slate-200"></div>
 <div>
         <div className="w-[10px] bg-slate-200"></div>
         
-        <p className="text-black mt-4">Created tables</p>
+        <p className="text-gray-800 font-semibold mt-4 ml-4">Created tables</p>
 
         {tableNames.map((name, index) => (
           <div key={index} className="relative pt-2">

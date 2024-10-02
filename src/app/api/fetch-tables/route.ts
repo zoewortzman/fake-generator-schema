@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 const { Client } = require('pg');
 
 // Replace with your actual connection string
-const connectionString =
-  "postgresql://postgres.urabuonbrmozvckwiend:zuphip-5difBu-xigwyx@aws-0-us-west-1.pooler.supabase.com:6543/postgres";
+const connectionString = process.env.CONNECTION_STRING;
 
 export async function POST(): Promise<NextResponse> {
     const client = new Client({
