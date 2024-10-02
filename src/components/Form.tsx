@@ -7,14 +7,12 @@ interface FormProps{
 
 export default function Form( {setChoices}: FormProps) {
     const [prompt, setPrompt] = useState("");
-    const [isLoading, setIsLoading] = useState(false)
     
     return (
         <div className="relative">
             <form className = "flex items-center full rounded-lg bg-gray-100 p-3 w-25 h-20 p-5" onSubmit={ async (e) => {
             console.log(e)
             e.preventDefault();
-            // use value entered to call openAI API
             if (prompt ==="") {
                 return;
             }

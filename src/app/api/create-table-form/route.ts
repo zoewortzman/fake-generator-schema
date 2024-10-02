@@ -4,26 +4,19 @@ const { Client } = require('pg');
 // Replace with your actual connection string
 const connectionString = 'postgresql://postgres.urabuonbrmozvckwiend:zuphip-5difBu-xigwyx@aws-0-us-west-1.pooler.supabase.com:6543/postgres';
 
-const client = new Client({
-  connectionString: connectionString,
-});
-
-
-const generateCreateTableSQL = (tableName: string, columnNames: string[], dataTypes: string[]): string => {
-  const columnDefinitions = columnNames.map((name, index) => {
-    return `${name} ${dataTypes[index]}`;
+const generateCreateTableSQL = (tableName:string, tableFields: [{name: string, dataType: string, dataFormat:string}]): string => {
+  const columnDefinitions = tableFields.map(field => {
+    return `${field.name} ${field.dataType}`;
   }).join(', ');
-  // Create the SQL statement
   const sqlCommand = `CREATE TABLE ${tableName} (${columnDefinitions});`;
   return sqlCommand;
 };
 
 async function fetchMockarooData(fields:{name:string, type:string}) {
-  const MOCKAROO_API_KEY = 'c7e77960'; // Replace with your actual API key
+  const MOCKAROO_API_KEY = 'c7e77960';
   const MOCKAROO_API_URL = 'https://api.mockaroo.com/api/generate.sql';
 
-
-  const response = await fetch(`${MOCKAROO_API_URL}?key=${MOCKAROO_API_KEY}&count=1`, {
+  const response = await fetch(`${MOCKAROO_API_URL}?key=${MOCKAROO_API_KEY}&count=10`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -34,22 +27,28 @@ async function fetchMockarooData(fields:{name:string, type:string}) {
   if (!response.ok) {
     throw new Error('Failed to fetch data from Mockaroo');
   }
-
   return response.text();
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+
+  const client = new Client({
+    connectionString: connectionString,
+  });
+  
   try {
     // Parse the request body to get the SQL command
-    const {tableSchema } = await request.json();
-    if (!tableSchema) {
+    const {tableName, tableFields} = await request.json();
+
+    if (!tableFields) {
       throw new Error('Table schema is missing.');
     }
-    const { columnNames,
-      dataTypes,
-      format,
-      tableName } = tableSchema
-    const sqlCreate = generateCreateTableSQL(tableName, columnNames, dataTypes)
+
+    if (!tableName) {
+        throw new Error('Table name is missing')
+    }
+
+    const sqlCreate = generateCreateTableSQL(tableName, tableFields)
 
     // Connect to the database
     await client.connect();
@@ -57,25 +56,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     await client.query(`DROP TABLE IF EXISTS ${tableName}`)
 
     await client.query(sqlCreate);
-    console.log('SQL command executed successfully.');
 
-    const schemaQuery = `
-    SELECT data_type
-    FROM information_schema.columns
-    WHERE table_name = $1
-  `;
-
-  // Execute the query to get schema information
-  const result = await client.query(schemaQuery, [tableName]);
-  const schema = result.rows;
-  console.log('Schema result:', result.rows);
-
-  const fields = columnNames.map((name:string, index:number) => ({
-    name,
-    type: format[index]
+  const fields = tableFields.map((field:{name: string, dataType: string, dataFormat:string}) => ({
+    name: field.name,
+    type: field.dataFormat
   }));
-
-
 
    let mockarooData = await fetchMockarooData(fields);
 
@@ -83,9 +68,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
    .replace(/insert into\s+\(/g, `insert into ${tableName} (`)
    .trim(); // Optionally trim leading/trailing whitespace
 
-  //  await client.query(sqlInserts)
+   await client.query(sqlInserts)
 
-  return NextResponse.json({ message: `${sqlInserts}` });
+   const data = await client.query(`SELECT * FROM ${tableName}`)
+
+   await client.query(`INSERT INTO fakedata_tablenames (table_name)
+VALUES ('${tableName}');`)
+
+  return NextResponse.json({ message: `Simulated data inserted into table ${tableName}`, data: data});
 
   // return NextResponse.json({
   //   // message: 'SQL command executed and schema retrieved successfully.',
@@ -99,12 +89,31 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   } catch (err) {
     console.error('Error executing SQL command:', err);
-
-    // Return an error response
     return NextResponse.json('Failed to execute SQL command', { status: 500 });
     
   } finally {
-    // Close the database connection
+    await client.end();
+  }
+}
+
+export async function PUT(request: NextRequest): Promise<NextResponse> {
+  try {
+    const {tableName} = await request.json();
+
+    if (!tableName) {
+        throw new Error('Table name is missing')
+    }
+    await client.connect();
+    console.log('Connected to the database.');
+   const data = await client.query(`SELECT * FROM ${tableName}`)
+
+   return NextResponse.json({ message: `More data feteched`, data: data});
+
+  } catch (err) {
+    console.error('Error executing SQL command:', err);
+    return NextResponse.json('Failed to execute SQL command', { status: 500 });
+    
+  } finally {
     await client.end();
   }
 }
